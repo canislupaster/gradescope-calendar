@@ -1,0 +1,17 @@
+{
+  "imports": {
+    "@types/jsdom": "npm:@types/jsdom@^21.1.7",
+    "hono": "jsr:@hono/hono@^4.6.17",
+    "ical-generator": "npm:ical-generator@^8.1.1",
+    "jsdom": "npm:jsdom@^26.0.0",
+    "tough-cookie": "npm:tough-cookie@^5.1.0",
+    "zod": "npm:zod@^3.24.1"
+  },
+  "tasks": {
+    "start": "deno run --allow-env --allow-net --unstable-kv -R=./deno_kv -W=./deno_kv --env-file --inspect-wait"
+  },
+  "compilerOptions": {
+    "jsx": "precompile",
+    "jsxImportSource": "hono/jsx"
+  }
+}
