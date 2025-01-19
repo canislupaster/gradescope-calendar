@@ -286,7 +286,7 @@ app.get("/:calId{[0-9a-f-]+\\.ics}", async c => {
 	for (const a of assignments) {
 		const renderDate = (x: number) => {
 			if (a.utcOffset==undefined) return new Date(x).toString();
-			else return new Date(x).toLocaleDateString("en-US", {timeZone: a.utcOffset});
+			else return new Date(x).toLocaleString("en-US", {timeZone: a.utcOffset});
 		};
 
 		const bits = [
