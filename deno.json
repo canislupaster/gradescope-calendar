@@ -8,7 +8,7 @@
     "zod": "npm:zod@^3.24.1"
   },
   "tasks": {
-    "start": "deno run --allow-env --allow-net --unstable-kv -R=./deno_kv -W=./deno_kv --env-file --inspect-wait"
+    "start": "deno run --allow-env --allow-net --unstable-kv -R=./deno_kv,./simple.min.css -W=./deno_kv --env-file --inspect-wait"
   },
   "compilerOptions": {
     "jsx": "precompile",

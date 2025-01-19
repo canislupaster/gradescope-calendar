@@ -104,8 +104,9 @@ const deriveKey = (key: string, salt: Buffer) =>
 		if (err) rej(err); else res(k);
 	}));
 
+// fairly unnecessary. i had fun though
 async function encrypt(text: string, key: string): Promise<Encrypted> {
-	const salt = randomBytes(32);
+	const salt = randomBytes(16);
 	const k = await deriveKey(key, salt);
 
 	const iv = randomBytes(16);
