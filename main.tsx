@@ -242,6 +242,8 @@ app.post(
 		//test if can access assignments...
 		await getAssignments(token);
 
+		console.log(`Creating calendar ${calId}`);
+
 		await kv.set(["calendar", calId], {
 			encryptedGradescopeToken: await encrypt(token, calToken),
 			tokenHash: doHash(calToken).toString("binary")
@@ -276,7 +278,18 @@ app.get("/:calId{[0-9a-f-]+\\.ics}", async c => {
 
 	const gradescopeToken = await decrypt(cal.encryptedGradescopeToken, token);
 
-	const assignments = await getAssignments(gradescopeToken);
+	console.log(`Fetching calendar ${id}`);
+
+	let assignments: Assignment[];
+	try {
+		assignments = await getAssignments(gradescopeToken);
+	} catch (e) {
+		console.error(`Error fetching calendar ${id}`);
+
+		//potentially sensitive, don't throw errors we didn't create
+		if (e instanceof AppError) throw e;
+		else throw new AppError("internal", "Could not retrieve assignments");
+	}
 
 	const calendar = ical({
 		name: "Gradescope Assignments",
@@ -313,8 +326,6 @@ app.get("/:calId{[0-9a-f-]+\\.ics}", async c => {
 });
 
 app.onError((err,c)=>{
-	console.error("Request error", err);
-
 	if (err instanceof ZodError) err=new AppError("invalid", "Malformed request");
 
 	c.status(err instanceof AppError ? errStatus(err.type) : 500);
@@ -322,7 +333,6 @@ app.onError((err,c)=>{
 	return c.html(<Layout title="An error occurred" >
 		<h1>{err instanceof AppError ? errName(err.type) : "An unexpected error occurred."}</h1>
 		{err instanceof AppError && err.msg && <h3>{err.msg}</h3>}
-		<p>Please check server logs for more details.</p>
 	</Layout>);
 });
 
