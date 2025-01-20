@@ -291,6 +291,7 @@ app.get("/:calId{[0-9a-f-]+\\.ics}", async c => {
 
 		const bits = [
 			a.course && `Course ${a.course}. `,
+			`Course page: ${a.url}`,
 			a.release && `Released ${renderDate(a.release)}`,
 			a.lateDue && `Late due date ${renderDate(a.lateDue)}`,
 			a.status && `Status: ${a.status}`
@@ -299,8 +300,6 @@ app.get("/:calId{[0-9a-f-]+\\.ics}", async c => {
 		calendar.createEvent({
 			start: new Date(a.due),
 			end: new Date(a.due),
-			url: a.url,
-			timezone: a.utcOffset,
 			summary: a.name,
 			location: `${a.courseShort} on Gradescope`,
 			description: bits.filter(x=>x).join("\n\n"),
